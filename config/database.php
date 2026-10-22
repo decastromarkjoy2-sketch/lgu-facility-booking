@@ -1,19 +1,19 @@
 <?php
-// config/database.php
-
-$host = getenv('POSTGRES_HOST') ?: 'db.bdamxhkaqxbyeemtecxl.supabase.co'; // Your Supabase Host
-$db   = getenv('POSTGRES_DATABASE') ?: 'postgres';
-$user = getenv('POSTGRES_USER') ?: 'postgres';
-$pass = getenv('POSTGRES_PASSWORD') ?: 'YOUR_SUPABASE_PASSWORD'; // Fallback local password
-$port = getenv('POSTGRES_PORT') ?: '5432';
+// Retrieve database environment variables or fallback to local defaults
+$host     = getenv('DB_HOST')     ?: 'localhost';
+$port     = getenv('DB_PORT')     ?: '5432';
+$dbname   = getenv('DB_NAME')     ?: 'postgres';
+$user     = getenv('DB_USER')     ?: 'postgres';
+$password = getenv('DB_PASSWORD') ?: 'your_local_password';
 
 try {
-    $dsn = "pgsql:host=$host;port=$port;dbname=$db";
-    $pdo = new PDO($dsn, $user, $pass, [
+    // Supabase uses PostgreSQL
+    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require";
+    $pdo = new PDO($dsn, $user, $password, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
-} catch (\PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+} catch (PDOException $e) {
+    die("Database Connection Error: " . $e->getMessage());
 }
 ?>
