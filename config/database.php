@@ -7,8 +7,8 @@ $user     = getenv('DB_USER')     ?: 'postgres';
 $password = getenv('DB_PASSWORD') ?: 'your_local_password';
 
 try {
-    // Supabase PgBouncer/Supavisor poolers require options flag for tenant routing
-    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;options='--dbname=$dbname';sslmode=require";
+    // Pass options directly without single quotes so PDO includes it in the handshake
+    $dsn = "pgsql:host={$host};port={$port};dbname={$dbname};options=--dbname={$dbname};sslmode=require";
     
     $pdo = new PDO($dsn, $user, $password, [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
