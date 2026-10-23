@@ -7,10 +7,11 @@ $user     = getenv('DB_USER')     ?: 'postgres';
 $password = getenv('DB_PASSWORD') ?: 'your_local_password';
 
 try {
-    // Supabase uses PostgreSQL
-    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require";
+    // Supabase PgBouncer/Supavisor poolers require options flag for tenant routing
+    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;options='--dbname=$dbname';sslmode=require";
+    
     $pdo = new PDO($dsn, $user, $password, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
 } catch (PDOException $e) {
