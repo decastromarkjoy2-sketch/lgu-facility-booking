@@ -23,8 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $event_title  = $_POST['eventTitle'] ?? '';
     $purpose      = $_POST['purpose'] ?? '';
 
-    // Enforce 30-minute buffer conflict check against both APPROVED and PENDING bookings
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM bookings WHERE venue_id = :venue_id AND event_date = :event_date AND status IN ('APPROVED', 'PENDING') AND (:start_time < ADDTIME(end_time, '00:30:00') AND :end_time > SUBTIME(start_time, '00:30:00'))");
+    // Enforce 30-minute buffer conflict check using PostgreSQL interval syntax instead of ADDTIME/SUBTIME
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM bookings WHERE venue_id = :venue_id AND event_date = :event_date AND status IN ('APPROVED', 'PENDING') AND (:start_time < (end_time::time + INTERVAL '30 minutes')::text AND :end_time > (start_time::time - INTERVAL '30 minutes')::text)");
     $stmt->execute([':venue_id' => $venue_id, ':event_date' => $event_date, ':start_time' => $start_time, ':end_time' => $end_time]);
     
     if ($stmt->fetchColumn() > 0) {
