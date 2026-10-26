@@ -36,8 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $id = 'RES-' . date('Y') . '-' . rand(100, 999);
 
-    // Fixed: Wrapped "VenueName" in double quotes to match exact uppercase/lowercase database schema
-    $insert = $pdo->prepare("INSERT INTO bookings (id, venue_id, \"VenueName\", event_title, purpose, department, contact_name, contact_info, attendees, event_date, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING')");
+    // Fixed: Use lowercase camelCase "venueName" with double quotes to match the exact schema
+    $insert = $pdo->prepare("INSERT INTO bookings (id, venue_id, \"venueName\", event_title, purpose, department, contact_name, contact_info, attendees, event_date, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING')");
     $insert->execute([$id, $venue_id, $venue_name, $event_title, $purpose, $department, $contact_name, $contact_info, $attendees, $event_date, $start_time, $end_time]);
 
     $log = $pdo->prepare("INSERT INTO audit_logs (booking_id, action_type, details, performed_by) VALUES (?, 'BOOKING_SUBMITTED', ?, ?)");
