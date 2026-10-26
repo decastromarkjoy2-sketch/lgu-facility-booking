@@ -1,10 +1,10 @@
 <?php
-// Retrieve database environment variables or fallback to defaults
-$host     = getenv('DB_HOST')     ?: 'aws-0-ap-northeast-2.pooler.supabase.com';
-$port     = getenv('DB_PORT')     ?: '5432';
-$dbname   = getenv('DB_NAME')     ?: 'postgres';
-$user     = getenv('DB_USER')     ?: 'postgres.bdamxhkaqbyeemteclxl';
-$password = getenv('DB_PASSWORD') ?: 'AHrBngaowKuuKXk4';
+// Retrieve database environment variables or fallback to defaults (supporting both DB_ and POSTGRES_ prefixes)
+$host     = getenv('DB_HOST')     ?: (getenv('POSTGRES_HOST')     ?: 'aws-0-ap-northeast-2.pooler.supabase.com');
+$port     = getenv('DB_PORT')     ?: (getenv('POSTGRES_PORT')     ?: '5432');
+$dbname   = getenv('DB_NAME')     ?: (getenv('POSTGRES_DATABASE') ?: 'postgres');
+$user     = getenv('DB_USER')     ?: (getenv('POSTGRES_USER')     ?: 'postgres.bdamxhkaqxbyeemtecxl');
+$password = getenv('DB_PASSWORD') ?: (getenv('POSTGRES_PASSWORD') ?: 'AHrBngaowKuuKXk4');
 
 // Ensure user does not end with duplicate suffixes
 if (str_ends_with($user, '.postgres')) {
