@@ -34,6 +34,8 @@ $isAdmin = in_array($currentRole, ['admin', 'gso_admin', 'mayor_admin']);
     
     <!-- PWA App Support Meta Tags & Manifest -->
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="/uploads/app-icon.png">
+    <link rel="apple-touch-icon" href="/uploads/app-icon.png">
     <meta name="theme-color" content="#065f46">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
