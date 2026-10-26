@@ -26,7 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'facility_status' => $facility_stat
     ];
 
-    $update_stmt = $pdo->prepare("INSERT INTO system_settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
+    // Fixed: Updated to PostgreSQL native ON CONFLICT syntax
+    $update_stmt = $pdo->prepare("INSERT INTO system_settings (setting_key, setting_value) VALUES (?, ?) ON CONFLICT (setting_key) DO UPDATE SET setting_value = EXCLUDED.setting_value");
     foreach ($settings_to_update as $key => $val) {
         $update_stmt->execute([$key, $val]);
     }
