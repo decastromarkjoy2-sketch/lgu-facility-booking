@@ -1,0 +1,20 @@
+{
+  "name": "LGU Tago Facility Booking",
+  "short_name": "LGU Booking",
+  "start_url": "/index.php?tab=calendar",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#065f46",
+  "icons": [
+    {
+      "src": "uploads/tago_seal.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "uploads/tago_seal.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
