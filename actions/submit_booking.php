@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $event_title  = $_POST['eventTitle'] ?? '';
     $purpose      = $_POST['purpose'] ?? '';
 
-    // Enforce 30-minute buffer conflict check using PostgreSQL interval syntax instead of ADDTIME/SUBTIME
+    // Enforce 30-minute buffer conflict check using PostgreSQL interval syntax
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM bookings WHERE venue_id = :venue_id AND event_date = :event_date AND status IN ('APPROVED', 'PENDING') AND (:start_time < (end_time::time + INTERVAL '30 minutes')::text AND :end_time > (start_time::time - INTERVAL '30 minutes')::text)");
     $stmt->execute([':venue_id' => $venue_id, ':event_date' => $event_date, ':start_time' => $start_time, ':end_time' => $end_time]);
     
@@ -36,7 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $id = 'RES-' . date('Y') . '-' . rand(100, 999);
 
-    $insert = $pdo->prepare("INSERT INTO bookings (id, venue_id, venueName, event_title, purpose, department, contact_name, contact_info, attendees, event_date, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING')");
+    // Fixed venueName to venue_name to match PostgreSQL column naming convention
+    $insert = $pdo->prepare("INSERT INTO bookings (id, venue_id, venue_name, event_title, purpose, department, contact_name, contact_info, attendees, event_date, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING')");
     $insert->execute([$id, $venue_id, $venue_name, $event_title, $purpose, $department, $contact_name, $contact_info, $attendees, $event_date, $start_time, $end_time]);
 
     $log = $pdo->prepare("INSERT INTO audit_logs (booking_id, action_type, details, performed_by) VALUES (?, 'BOOKING_SUBMITTED', ?, ?)");
