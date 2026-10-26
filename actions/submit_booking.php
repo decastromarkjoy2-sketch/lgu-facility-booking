@@ -36,8 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $id = 'RES-' . date('Y') . '-' . rand(100, 999);
 
-    // Fixed venueName to venue_name to match PostgreSQL column naming convention
-    $insert = $pdo->prepare("INSERT INTO bookings (id, venue_id, venue_name, event_title, purpose, department, contact_name, contact_info, attendees, event_date, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING')");
+    // Updated column name from venue_name to venuename to match Supabase database schema
+    $insert = $pdo->prepare("INSERT INTO bookings (id, venue_id, venuename, event_title, purpose, department, contact_name, contact_info, attendees, event_date, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING')");
     $insert->execute([$id, $venue_id, $venue_name, $event_title, $purpose, $department, $contact_name, $contact_info, $attendees, $event_date, $start_time, $end_time]);
 
     $log = $pdo->prepare("INSERT INTO audit_logs (booking_id, action_type, details, performed_by) VALUES (?, 'BOOKING_SUBMITTED', ?, ?)");
